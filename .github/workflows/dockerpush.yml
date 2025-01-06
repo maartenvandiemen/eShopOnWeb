@@ -22,8 +22,13 @@ jobs:
         registry: ${{ env.REGISTRY }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+    - id: string
+      name: Lowercase repositoryname
+      uses: Entepotenz/change-string-case-action-min-dependencies@v1.2.0
+      with:
+        string: ${{ github.repository }}
     - uses: docker/build-push-action@v6
       with:
         file: ${{github.workspace}}/src/Web/Dockerfile
         push: true
-        tags: ${{ env.REGISTRY }}/eshoponweb:latest
+        tags: ${{ env.REGISTRY }}/${{ steps.string.outputs.lowercase }}:latest
