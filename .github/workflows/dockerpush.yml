@@ -22,6 +22,6 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - uses: docker/build-push-action@v6
       with:
-        file: ${{github.workspace}}/dockerFile/Dockerfile
+        file: ${{github.workspace}}/src/Web/Dockerfile
         push: true
         tags: eshoponweb/web:latest
