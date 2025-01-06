@@ -26,4 +26,4 @@ jobs:
       with:
         file: ${{github.workspace}}/src/Web/Dockerfile
         push: true
-        tags: eshoponweb/web:latest
+        tags: ${{ env.REGISTRY }}/eshoponweb:latest
