@@ -1,24 +1,27 @@
-name: eShopOnWeb - Code Index
+name: eShopOnWeb - Push Docker Image to Git Artifacts
 
 on: workflow_dispatch
 
 jobs:
-  build:
-
-    runs-on: windows-latest
+  docker:
+    env:
+      REGISTRY: ghcr.io
+      DOCKER_BUILD_SUMMARY: true
+      DOCKER_BUILD_RECORD_UPLOAD: true
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v4
+    - uses: docker/login-action@v3
       with:
-        dotnet-version: 8.0.x
-
-    - name: Build with dotnet
-      run: dotnet build ./Everything.sln --configuration Release /bl
-
-    - uses: microsoft/RichCodeNavIndexer@v0.1
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - uses: docker/build-push-action@v6
       with:
-        repo-token: ${{ github.token }}
-        languages: 'csharp'
-        environment: 'internal'
+        file: ${{github.workspace}}/dockerFile/Dockerfile
+        push: true
+        tags: eshoponweb/web:latest
